@@ -2,41 +2,166 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!!!</title>
-     <style>
+    <title>No smoking watch</title>
+    <style>
         .container {
-        display: flex;
-        justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 175px;
         }
         .box {
-        width: 800px;
-        height: 150px;
-        background-color: #f0f0f0;
-        border-radius: 10px;
-        margin-bottom: 20px;
+            display: flex;
+            width: 800px;
+            height: 150px;
+            background-color: #f0f0f0;
+            margin-bottom: 1px;
+            border-radius: 25px;
+            text-align: center;
+            align-items: center;
+            gap: 10px;
         }
-        </style>
+        .str1 {
+            font-size: 20px;
+        }
+        .str2 {
+            color: #9b9a9a;
+            font-size: 12px;
+        }
+        .str {
+            font-size: 50px;
+        }
+        .icon {
+            display: flex;
+            margin-left: 50px;
+            align-items: center;
+            height: 55px;
+        }
+        .str-container {
+            line-height: 1.2;
+            margin-left: 25px;
+            text-align: left;
+        }
+    </style>
 </head>
+
 <body style="background-color: black;">
     <div class="container">
         <div class="box">
-            box1
+            <img src="./images/clock.drawio.svg" alt="clock" class="icon">
+            <div class="str-container">
+                <span class="str1">
+                    No smoking time<br>
+                    <span class="str" id="clock"></span>
+                </span>
+            </div>
         </div>
     </div>
     <div class="container">
         <div class="box">
-            box2
+            <img src="./images/warning.drawio.svg" alt="warning" class="icon">
+            <div class="str-container">
+                <span class="str1">
+                    Number of cigarettes quit<br>
+                    <span class="str" id="warning"></span>
+                </span>
+            </div>
         </div>
     </div>
     <div class="container">
         <div class="box">
-            box3
+            <img src="./images/money.drawio.svg" alt="money" class="icon">
+            <div class="str-container">
+                <span class="str1">
+                Amount saved<br>
+                <span class="str" id="money">$20</span>
+                <div class="str2">※Calculated based on 20 sticks per box.</div>
+                </span>
+            </div>
         </div>
     </div>
     <div class="container">
         <div class="box">
-            box4
+            <img src="./images/heart.drawio.svg" alt="heart" class="icon">
+            <div class="str-container">
+                <span class="str1">
+                Extended lifespan<br>
+                <span class="str" id="heart"></span>
+                <div class="str2">※This calculation is based on the established theory that each cigarette shortens life expectancy <br>by 5 minutes and 30 seconds. For reference only.</div>
+                </span>
+            </div>
         </div>
     </div>
+    <script>
+        function convertSecondsToDhms(totalSeconds) {
+            const day = Math.floor(totalSeconds / (24 * 60 * 60));
+            const hour = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+            const minute = Math.floor((totalSeconds % (60 * 60)) / 60);
+
+            let result = '';
+            if (day > 0) {
+                result += `${day}d `;
+            } else {
+                result += `0d `;
+            }
+
+            if (hour > 0) {
+                result += `${hour}h `;
+            } else {
+                result += `0h `;
+            }
+
+            if (minute > 0) {
+                result += `${minute}min `;
+            } else {
+                result += `0min `;
+            }
+
+            return result.trim();
+        }
+        function updateElapsedTime() {
+            // Set the specified start date and time
+            const startDate = new Date('2025-09-23T17:00:00');
+
+            // Get the current date and time
+            const now = new Date();
+
+            // Calculate elapsed time in milliseconds
+            const diffInMs = now.getTime() - startDate.getTime();
+
+            // Convert milliseconds to days, hours, minutes, and seconds
+            const diffInSeconds = Math.floor(diffInMs / 1000);
+            const diffInMinutes = Math.floor(diffInSeconds / 60);
+            const diffInHours = Math.floor(diffInMinutes / 60);
+            const diffInDays = Math.floor(diffInHours / 24);
+
+            // Calculate the remaining time
+            const seconds = diffInSeconds % 60;
+            const minutes = diffInMinutes % 60;
+            const hours = diffInHours % 24;
+
+            // Create a string to display the elapsed time
+            const elapsedTimeText = `${diffInDays}d ${hours}h ${minutes}:${seconds}`;
+
+            const numberOfCigarettesQuit = Math.floor(diffInDays * 20 + hours * 20 / 24);
+
+            const amountSaved = Math.floor((diffInDays * 500 + hours * 500 / 24) / 150);
+
+            const extendedLifespan = convertSecondsToDhms(numberOfCigarettesQuit * (5 * 60 + 30));
+
+            // Update HTML elements
+            document.getElementById('clock').textContent = elapsedTimeText;
+            document.getElementById('warning').textContent = `${numberOfCigarettesQuit} pieces`;
+            document.getElementById('money').textContent = `$${amountSaved}`;
+            document.getElementById('heart').textContent = `${extendedLifespan}`;
+        }
+
+
+        // Execute once when the page loads
+        updateElapsedTime();
+
+        // Updates every second
+        setInterval(updateElapsedTime, 1000);
+    </script>
 </body>
 </html>
